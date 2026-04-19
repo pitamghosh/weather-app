@@ -1,79 +1,88 @@
 const apiKey = "fc07cd25b66847d50f7f928a285012ee";
 
-// ENTER key support
-document.getElementById("cityInput").addEventListener("keypress", function(e){
-  if(e.key === "Enter"){
-    getWeather();
-  }
-});
+function getWeather(){
 
-function getWeather() {
+  const city = document.getElementById("cityInput").value;
 
-  const city = document.getElementById("cityInput").value.trim();
-
-  if(city === ""){
-    alert("Please enter a city name!");
-    return;
-  }
-
-  // NORMAL SEARCH
   fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`)
   .then(res => res.json())
   .then(data => {
 
-    if(data.cod !== 200){
-      // fallback to Kolkata
-      alert("City not found! Showing Kolkata instead.");
+    console.log(data);
 
-      fetch(`https://api.openweathermap.org/data/2.5/weather?q=Kolkata&appid=${apiKey}&units=metric`)
-      .then(res => res.json())
-      .then(data => updateUI(data));
-
+    if(data.cod != 200){
+      alert("City not found");
       return;
     }
 
-    updateUI(data);
+    // BASIC DATA
+    document.getElementById("city").innerText = data.name;
 
-  })
-  .catch(() => {
-    alert("Error fetching data!");
+    document.getElementById("temp").innerText =
+      data.main.temp + "°C (Feels " + data.main.feels_like + "°C)";
+
+    document.getElementById("desc").innerText = data.weather[0].main;
+
+    // 🔥 ADVICE SYSTEM
+    const feels = data.main.feels_like;
+    const weather = data.weather[0].main.toLowerCase();
+
+    let advice = "";
+
+    // temperature based
+    if(feels > 35){
+      advice = "🔥 Very hot! Stay hydrated.";
+    }
+    else if(feels > 25){
+      advice = "😎 Warm weather. Stay cool.";
+    }
+    else if(feels > 15){
+      advice = "🙂 Pleasant weather.";
+    }
+    else{
+      advice = "🧥 Cold! Wear warm clothes.";
+    }
+
+    // weather override
+    if(weather.includes("rain")){
+      advice = "🌧️ Carry an umbrella!";
+    }
+    if(weather.includes("cloud")){
+      advice = "☁️ Cloudy day.";
+    }
+    if(weather.includes("clear")){
+      advice = "☀️ Clear sky. Enjoy!";
+    }
+    if(weather.includes("haze")){
+      advice = "😷 Air quality low. Wear mask.";
+    }
+
+    document.getElementById("advice").innerText = advice;
+
+    getForecast(data.name);
+
   });
-
 }
 
-// UI UPDATE FUNCTION (clean code)
-function updateUI(data){
+function getForecast(city){
 
-  document.getElementById("city").innerText = data.name;
+  fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
+  .then(res => res.json())
+  .then(data => {
 
-  document.getElementById("temp").innerText =
-    data.main.temp + "°C (Feels " + data.main.feels_like + "°C)";
+    console.log(data);
 
-  document.getElementById("desc").innerText = data.weather[0].main;
+    const forecast = document.getElementById("forecast");
+    forecast.innerHTML = "";
 
-  document.getElementById("extra").innerText =
-    "Humidity: " + data.main.humidity + "% | Wind: " + data.wind.speed + " m/s";
+    for(let i=0;i<40;i+=8){
 
-  // ICON LOGIC
-  const icon = document.getElementById("icon");
-  const weather = data.weather[0].main.toLowerCase();
+      const item = data.list[i];
 
-  if(weather.includes("rain")){
-    icon.className = "fa-solid fa-cloud-rain weather-icon";
-  }
-  else if(weather.includes("cloud")){
-    icon.className = "fa-solid fa-cloud weather-icon";
-  }
-  else if(weather.includes("clear")){
-    icon.className = "fa-solid fa-sun weather-icon";
-  }
-  else if(weather.includes("haze") || weather.includes("smoke")){
-    icon.className = "fa-solid fa-smog weather-icon";
-  }
-  else if(weather.includes("thunder")){
-    icon.className = "fa-solid fa-bolt weather-icon";
-  }
-  else{
-    icon.className = "fa-solid fa-cloud weather-icon";
-  }
+      forecast.innerHTML += `
+        <p>${item.dt_txt} - ${item.main.temp}°C</p>
+      `;
+    }
+
+  });
 }
