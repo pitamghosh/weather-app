@@ -1,0 +1,55 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(-45deg, #4facfe, #00f2fe, #43e97b, #38f9d7);
+  background-size: 400% 400%;
+  animation: bg 10s ease infinite;
+  text-align: center;
+  color: white;
+}
+
+@keyframes bg {
+  0% {background-position: 0%}
+  50% {background-position: 100%}
+  100% {background-position: 0%}
+}
+
+.container {
+  margin-top: 60px;
+}
+
+.search input {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.search button {
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: black;
+  color: white;
+}
+
+.card {
+  margin: auto;
+  margin-top: 30px;
+  width: 260px;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  from {transform: scale(0.7); opacity: 0;}
+  to {transform: scale(1); opacity: 1;}
+}
+
+.weather-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
