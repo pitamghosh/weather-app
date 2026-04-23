@@ -3,50 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>Weather App</title>
-
-  <!-- FONT -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- ICONS -->
-  <script src="https://kit.fontawesome.com/yourkit.js"></script>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="container">
+    <h1>🌦️ Weather App</h1>
 
-  <h1>Weather App</h1>
-
-  <div class="search">
-    <input type="text" id="cityInput" placeholder="Enter city">
+    <input type="text" id="cityInput" placeholder="Enter city...">
     <button onclick="getWeather()">Search</button>
+
+    <div id="result"></div>
   </div>
 
-  <div class="card">
-
-    <div id="loading">Loading...</div>
-
-    <i id="icon" class="weather-icon"></i>
-
-    <h2 id="city"></h2>
-
-    <h1 id="temp"></h1>
-
-    <p id="desc"></p>
-
-    <p id="extra"></p>
-
-    <p id="advice"></p>
-
-  </div>
-
-  <div id="forecast" class="forecast"></div>
-
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
